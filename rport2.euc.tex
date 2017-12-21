@@ -1,0 +1,118 @@
+\documentclass[a4j]{jarticle}
+
+\textheight 25cm
+\topmargin -1.5cm
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{flushright}
+グループ番号：B-4-1
+\end{flushright}
+
+\begin{center}
+{\LARGE 作業報告書}
+\end{center}
+
+\subsection*{作業日}
+
+%ここに作業日を書く
+2017年12月7日(木)
+
+
+\subsection*{作業者氏名}
+
+\begin{itemize}
+  \item メンバー1:芥川 幸平
+  \item メンバー2:大西 隼也
+\end{itemize}
+
+\subsection*{本日の作業目標}
+%ここに本日の作業目標を書く
+\begin{enumerate}
+\item 基本言語仕様の作成
+\item 基本言語仕様の拡張
+\end{enumerate}
+
+\subsection*{本日の作業結果}
+%ここに全体としてどこまで作業が進んだかを書く
+今回は基本言語仕様を完成させて，拡張についても課題4までのサンプルプログラムが問題無く通るよう拡張することができた．
+
+\subsection*{特記事項（質問・意見・感想など）}
+%何かあれば書く
+今回は前回の反省を活かしてプログラミングの際にナビゲータが早くにミスを発見することができ，効率良く作業を進めることができた．しかし，課題5の拡張を完成させることはできなかった．
+
+\subsection*{プログラム}
+\begin{itemize}
+\item 基本言語仕様の yaccファイル
+\begin{verbatim}
+     1  %{
+     2  #define YYSTYPE double
+     3  #include <stdio.h>
+     4  #include "edu4.tab.h"
+     5    extern int yylex();
+     6    extern int yyerror();
+     7    %}
+     8  %token IDEN 
+     9  %token NUMBER
+    10  %token array
+    11  %token define
+    12  %token ELSE
+    13  %token IF
+    14  %token WHILE
+    15  %token compari
+    16  %token cricri
+    17  %token FOR
+    18  
+    19  %%
+    20  
+    21  program: union sentences;
+    22  union: decsen union | decsen;
+    23  decsen: define IDEN ';' | array IDEN'['NUMBER']' ';' | array IDEN'['IDEN']' ';'
+    24  |array IDEN'['NUMBER']''['NUMBER']'';' | array IDEN'['IDEN']''['IDEN']'';';
+    25  sentences: sentence sentences | sentence;
+    26  sentence: asastate | loopsen | brasen | forsen ;
+    27  asastate: IDEN '=' expression ';' | IDEN'['NUMBER']' '=' expression ';' 
+    28  | IDEN'['IDEN']' '=' expression ';'
+    29  | IDEN'['NUMBER']''['NUMBER']' '=' expression ';'
+    30  | IDEN'['IDEN']''['IDEN']' '=' expression ';'
+    31  | IDEN cricri | cricri IDEN ;
+    32  
+    33  expression : expression adsub term | term;
+    34  
+    35  term : term muldiv fact | fact;
+    36  
+    37  fact : variable | '('expression')';
+    38  
+    39  adsub: '+' | '-';
+    40  muldiv:'*' | '/';
+    41  
+    42  variable: IDEN | NUMBER | IDEN'['NUMBER']'| IDEN'['IDEN']'
+    43  | IDEN'['NUMBER']''['NUMBER']' | IDEN'['IDEN']''['IDEN']' ;
+    44  
+    45  loopsen: WHILE '('condition')''{'sentences'}';
+    46  
+    47  brasen: IF'('condition')''{'sentences'}';
+    48  | IF'('condition')''{'sentences'}'ELSE'{'sentences'}';
+    49  
+    50  forsen: FOR '('asastate  condition ';' asastate ')' '{'sentences'}';
+    51  
+    52  condition: expression compari expression;
+    53  
+    54  //compari: '=''=' | '<' | '>' | '<''=' | ">=";
+    55  
+    56  %%
+    57  int main(void)
+    58  {
+    59    if(yyparse()){
+    60      fprintf(stderr, "Error\n");
+    61      return 1;
+    62    }
+    63  }
+\end{verbatim}
+\end{itemize}
+
+\subsection*{報告者氏名}
+大西 隼也
+
+\end{document}

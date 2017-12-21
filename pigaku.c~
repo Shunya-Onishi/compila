@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+void boin(){
+
+} 
+
+void siin(){
+
+}
+
+int main(){
+
+  printf("nyuryoku\n");
+
+}
