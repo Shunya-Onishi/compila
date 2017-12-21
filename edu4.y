@@ -11,6 +11,7 @@
   int ival;
   char *sval;
   int *dummy;
+  double dval;
  }
 
 %token <sval> IDEN 
@@ -41,6 +42,7 @@
 %type <node> brasen
 %type <node> forsen
 %type <node> condition
+%type <node> ntyan
 
 
 %%
@@ -51,29 +53,29 @@ union: decsen union
 | decsen;
 
 decsen: define IDEN ';' 
-| array identyan'['NUMBER']' ';' {$$ = build_node2(ARRAY, $2, $4);}
+| array identyan'['ntyan']' ';' {$$ = build_node2(ARRAY, $2, $4);}
 | array identyan'['identyan']' ';' {$$ = build_node2(ARRAY, $2, $4);}
-| array identyan'['NUMBER']''['NUMBER']'';' {$$ = build_node3(ARRAY, $2, $4, $7);}
+| array identyan'['ntyan']''['ntyan']'';' {$$ = build_node3(ARRAY, $2, $4, $7);}
 | array identyan'['identyan']''['identyan']'';' {$$ = build_node3(ARRAY, $2, $4, $7);};
 
-sentences: sentence sentences {$$ = build_node2(SENS, $1, $2;}
-| sentence {$$ = bulid_node1($1);};
+sentences: sentence sentences {$$ = build_node2(SENS, $1, $2);}
+| sentence {$$ = build_node1($1);};
 
-sentence: asastate {$$ = bulid_node($1);}
-| loopsen {$$ = bulid_node($1);}
-| brasen {$$ = bulid_node($1);}
-| forsen {$$ = bulid_node($1);};
+sentence: asastate {$$ = build_node1($1);}
+| loopsen {$$ = build_node1($1);}
+| brasen {$$ = build_node1($1);}
+| forsen {$$ = build_node1($1);};
 
-asastate: IDEN '=' expression ';' {$$ = build_node2(ASSIGN, $1, $3);}
+ asastate: identyan '=' expression ';' {$$ = build_node2(ASSIGN, $1, $3);}
   | assignment '=' expression ';' {$$ = build_node2(ASSIGN, $1, $3);}
   | incri;
 
 incri: identyan cricri
 | cricri identyan;
 
- assignment:identyan'['NUMBER']' {$$ = build_node2(ARRAY, $1, $3);}
+ assignment:identyan'['ntyan']' {$$ = build_node2(ARRAY, $1, $3);}
 | identyan'['identyan']' {$$ = build_node2(ARRAY, $1, $3);}
-| identyan'['NUMBER']''['NUMBER']' {$$ = build_node3(ARRAY, $1, $3, $6);}
+| identyan'['ntyan']''['ntyan']' {$$ = build_node3(ARRAY, $1, $3, $6);}
 | identyan'['identyan']''['identyan']'  {$$ = build_node3(ARRAY, $1, $3, $6);};
 
 expression : expression adsub term {$$ = build_node2(ADSUB, $1, $3);}
@@ -89,13 +91,15 @@ fact : variable {$$ = build_node1($1);}
   //muldiv:'*' | '/'; //?????
 
 variable: identyan {$$ = build_node1($1);}
-| NUMBER {$$ = build_num_node(NUM, $1);} 
-| identyan'['NUMBER']' {$$ = build_node2(ARRAY, $1, $3);}
+| ntyan {$$ = build_node1($1);} 
+| identyan'['ntyan']' {$$ = build_node2(ARRAY, $1, $3);}
 | identyan'['identyan']' {$$ = build_node2(ARRAY, $1, $3);}
-| identyan'['NUMBER']''['NUMBER']' {$$ = build_node3(ARRAY, $1, $3, $6);}
+| identyan'['ntyan']''['ntyan']' {$$ = build_node3(ARRAY, $1, $3, $6);}
 | identyan'['identyan']''['identyan']'{$$ = build_node3(ARRAY, $1, $3, $6);};
 
 identyan:IDEN {$$ = build_ident_node(IDENT, yytext);};
+
+ntyan:NUMBER {$$ = build_num_node(NUM, $1);}; 
 
 loopsen: WHILE '('condition')''{'sentences'}'{$$ = build_node2(WHILE_N, $3, $6);};
 
@@ -109,10 +113,13 @@ condition: expression compari expression {$$ = build_node2(compari_N, $1, $3);};
 //compari: '=''=' | '<' | '>' | '<''=' | ">=";
 
 %%
+
 int main(void)
 {
   if(yyparse()){
     fprintf(stderr, "Error\n");
     return 1;
   }
+
+  return 0;
 }

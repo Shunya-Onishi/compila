@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+//#include "edu4.tab.h"
+
+extern int yyerror();
 
 typedef enum {
   IDENT, //変数のノード型

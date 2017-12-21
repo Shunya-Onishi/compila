@@ -14,7 +14,7 @@ for {return FOR;}
 '+'|'-' {return adsub;}
 '*'|'/' {return muldiv;}
 
--?(([0-9]+)|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) {yylval = atof(yytext); return NUMBER;}
+-?(([0-9]+)|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) {yylval.dval = atof(yytext); return NUMBER;}
 
 [a-zA-Z_][a-zA-Z0-9_]* {return IDEN;}
 

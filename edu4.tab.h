@@ -71,9 +71,10 @@ union YYSTYPE
   int ival;
   char *sval;
   int *dummy;
+  double dval;
  
 
-#line 77 "edu4.tab.h" /* yacc.c:1909  */
+#line 78 "edu4.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
