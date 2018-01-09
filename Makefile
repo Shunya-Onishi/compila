@@ -1,6 +1,6 @@
 CC	= gcc
 CFLAGS	= -O -Wall
-LEX	= flex
+LEX	= flex -d
 YACC 	= bison -d
 HDRS	= edu4.tab.h
 LDFLAGS	= -lfl -ly
@@ -18,7 +18,7 @@ lex.yy.c: edu4.l
 edu4.tab.c: edu4.y
 	$(YACC) edu4.y
 
-clean:;		rm -f* .o*~
+clean:;		rm -f *.o *~ lex.yy.c
 
 ###
 lex.yy.o:lex.yy.c edu4.tab.h

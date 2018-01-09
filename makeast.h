@@ -6,6 +6,8 @@
 extern int yyerror();
 
 typedef enum {
+  PROGRAM,
+  UNIONS,
   IDENT, //変数のノード型
   NUM, //整数のノード型
   SENS, //文集合のノード型
@@ -17,6 +19,7 @@ typedef enum {
   //MINUS, //減算演算子のノード型
   ADSUB, //加減算
   MULDIV, //乗除算
+  INCRI, //インクリメント
 
   WHILE_N, // whileのノード型
   IF_N, // ifのノード型

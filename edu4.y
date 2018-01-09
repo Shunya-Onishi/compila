@@ -27,6 +27,8 @@
 %token <node> cricri
 %token <dummy> FOR
 
+%type <node> program
+%type <node> unions
 %type <node> decsen
 %type <node> sentences
 %type <node> sentence
@@ -47,31 +49,34 @@
 
 %%
 
-program: union sentences;
+program: unions sentences {
+  $$ = build_node2(PROGRAM, $1, $2);
+  printNodes($$);
+};
 
-union: decsen union 
-| decsen;
+unions: decsen unions  {$$ = build_node2(UNIONS, $1, $2);}
+| decsen  {$$ = build_node1($1);}; //??????
 
-decsen: define IDEN ';' 
+decsen: define IDEN ';' {$$ = build_node1(IDENT, $1);} //?????????
 | array identyan'['ntyan']' ';' {$$ = build_node2(ARRAY, $2, $4);}
 | array identyan'['identyan']' ';' {$$ = build_node2(ARRAY, $2, $4);}
 | array identyan'['ntyan']''['ntyan']'';' {$$ = build_node3(ARRAY, $2, $4, $7);}
 | array identyan'['identyan']''['identyan']'';' {$$ = build_node3(ARRAY, $2, $4, $7);};
 
 sentences: sentence sentences {$$ = build_node2(SENS, $1, $2);}
-| sentence {$$ = build_node1($1);};
+| sentence {$$ = build_node1($1);}; //?????????
 
-sentence: asastate {$$ = build_node1($1);}
-| loopsen {$$ = build_node1($1);}
-| brasen {$$ = build_node1($1);}
-| forsen {$$ = build_node1($1);};
+sentence: asastate {$$ = build_node1($1);} //?????
+| loopsen {$$ = build_node1($1);} //?????
+| brasen {$$ = build_node1($1);} //????
+| forsen {$$ = build_node1($1);}; //????/
 
- asastate: identyan '=' expression ';' {$$ = build_node2(ASSIGN, $1, $3);}
+asastate: identyan '=' expression ';' {$$ = build_node2(ASSIGN, $1, $3);}
   | assignment '=' expression ';' {$$ = build_node2(ASSIGN, $1, $3);}
-  | incri;
+  | incri ';' {$$ = build_node1($1);} //?????????
 
-incri: identyan cricri
-| cricri identyan;
+incri: identyan cricri {$$ = build_node2(INCRI, $1, $2);}
+| cricri identyan {$$ = build_node2(INCRI, $1, $2);}
 
  assignment:identyan'['ntyan']' {$$ = build_node2(ARRAY, $1, $3);}
 | identyan'['identyan']' {$$ = build_node2(ARRAY, $1, $3);}
@@ -79,19 +84,19 @@ incri: identyan cricri
 | identyan'['identyan']''['identyan']'  {$$ = build_node3(ARRAY, $1, $3, $6);};
 
 expression : expression adsub term {$$ = build_node2(ADSUB, $1, $3);}
-| term {$$ = build_node1($1);}; 
+| term {$$ = build_node1($1);};  //????
 
 term : term muldiv fact {$$ = build_node2(MULDIV, $1, $3);}
-| fact {$$ = build_node1($1);};
+| fact {$$ = build_node1($1);}; //????
 
-fact : variable {$$ = build_node1($1);}
-  | '('expression')' {$$ = build_node1($2);};
+fact : variable {$$ = build_node1($1);} //?????
+| '('expression')' {$$ = build_node1($2);};  //?????
 
   //adsub: '+' | '-'; //?????
   //muldiv:'*' | '/'; //?????
 
-variable: identyan {$$ = build_node1($1);}
-| ntyan {$$ = build_node1($1);} 
+variable: identyan {$$ = build_node1($1);} //?????
+| ntyan {$$ = build_node1($1);} //?????
 | identyan'['ntyan']' {$$ = build_node2(ARRAY, $1, $3);}
 | identyan'['identyan']' {$$ = build_node2(ARRAY, $1, $3);}
 | identyan'['ntyan']''['ntyan']' {$$ = build_node3(ARRAY, $1, $3, $6);}
