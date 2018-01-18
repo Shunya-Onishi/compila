@@ -52,11 +52,19 @@ extern int yydebug;
     ELSE = 262,
     IF = 263,
     WHILE = 264,
-    adsub = 265,
-    muldiv = 266,
-    compari = 267,
-    cricri = 268,
-    FOR = 269
+    add = 265,
+    sub = 266,
+    mul = 267,
+    divi = 268,
+    eq = 269,
+    deq = 270,
+    lt = 271,
+    gt = 272,
+    le = 273,
+    ge = 274,
+    incri = 275,
+    decri = 276,
+    FOR = 277
   };
 #endif
 
@@ -65,7 +73,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 9 "edu4.y" /* yacc.c:1909  */
+#line 10 "edu4.y" /* yacc.c:1909  */
 
   struct node *node;
   int ival;
@@ -74,7 +82,7 @@ union YYSTYPE
   double dval;
  
 
-#line 78 "edu4.tab.h" /* yacc.c:1909  */
+#line 86 "edu4.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

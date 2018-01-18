@@ -9,10 +9,17 @@ array {return array;}
 define {return define;}
 for {return FOR;}
 
-"=="|"<"|">"|"<="|">=" {return compari;}
-"++"|"--" {return cricri;}
-"+"|"-" {return adsub;}
-"*"|"/" {return muldiv;}
+"==" {return deq;}
+"<"  {return lt;}
+">"  {return gt;}
+"<=" {return le;}
+">=" {return ge;}
+"++" {return incri;}
+"--" {return decri;}
+"+"  {return add;}
+"-"  {return sub;}
+"*"  {return mul;}
+"/"  {return divi;}
 
 -?(([0-9]+)|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?) {yylval.dval = atof(yytext);  return NUMBER;}
 

@@ -8,24 +8,41 @@ extern int yyerror();
 typedef enum {
   PROGRAM,
   UNIONS,
+  DECSEN, //new!!
   IDENT, //変数のノード型
   NUM, //整数のノード型
   SENS, //文集合のノード型
+  SEN, //new!!
   ASSIGN, //代入文の　=　のノード型
 
   ARRAY, //配列だよ～～
+  EXP, //new!!
+  TERM, //new!!
+  FACT, //new11
 
   //PLUS, //加算演算子のノード型
   //MINUS, //減算演算子のノード型
-  ADSUB, //加減算
-  MULDIV, //乗除算
-  INCRI, //インクリメント
+  //ADSUB, //加減算
+  //MULDIV, //乗除算
+  ADD, 
+  SUB,
+  MUL,
+  DIV,
+  KOTI_INCRI, //インクリメント
+  KOTI_DECRI, //デクリメント
+  ZEN_INCRI,
+  ZEN_DECRI,
 
   WHILE_N, // whileのノード型
   IF_N, // ifのノード型
   FOR_N, // forのノード型
 
-  compari_N, //
+  DEQ, // ==
+  LT, // <
+  GT, // >
+  LE, //<=
+  GE, // >=
+
   
 
 } NType;
@@ -38,7 +55,7 @@ typedef struct node{
   struct node *brother;
 } Node;
 
-Node* build_node1(Node* p1);
+Node* build_node1(NType t, Node* p1);
 Node* build_node2(NType t, Node* p1, Node* p2);
 Node* build_node3(NType t, Node* p1, Node* p2, Node* p3);
 Node* build_node4(NType t, Node* p1, Node* p2, Node* p3, Node* p4);

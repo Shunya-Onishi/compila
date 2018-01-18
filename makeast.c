@@ -119,6 +119,9 @@ void printstate(Node *p){
   case UNIONS:
     printf("変数宣言部\n");
     break;
+  case DECSEN:
+    printf("宣言文\n");
+    break;
   case IDENT:
     printf("識別子\n");
     break;
@@ -128,23 +131,49 @@ void printstate(Node *p){
   case SENS:
     printf("文集合\n");
     break;
+  case SEN:
+    printf("文\n");
+    break;
   case ASSIGN:
-    printf("代入文\n");
+    printf("代入文=\n");
     break;
   case ARRAY:
     printf("配列\n");
     break;
-  case ADSUB:
-    printf("加減算\n");
+  case EXP:
+    printf("算術式\n");
     break;
-  case MULDIV:
-    printf("乗除算\n");
+  case TERM:
+    printf("項\n");
     break;
-  case INCRI:
-    printf("インクリメント\n");
+  case FACT:
+    printf("因子\n");
     break;
-  case WHILE_N:
-    printf("while\n");
+  case ADD:
+    printf("+\n");
+    break;
+  case SUB:
+    printf("-\n");
+    break;
+  case MUL:
+    printf("*\n");
+    break;
+  case DIV:
+    printf("÷\n");
+    break;
+  case KOTI_INCRI:
+    printf("koti++\n");
+    break;
+  case KOTI_DECRI:
+    printf("koti--\n");
+    break;
+  case ZEN_INCRI:
+    printf("zen++\n");
+    break;
+  case ZEN_DECRI:
+    printf("zen--\n");
+    break;
+  case WHILE_N: printf("while\n");
     break;
   case IF_N:
     printf("if\n");
@@ -152,8 +181,20 @@ void printstate(Node *p){
   case FOR_N:
     printf("for\n");
     break;
-  case compari_N:
-    printf("compari\n");
+  case DEQ:
+    printf("==\n");
+    break;
+  case LT:
+    printf("<\n");
+    break;
+  case GT:
+    printf(">\n");
+    break;
+  case LE:
+    printf("<=\n");
+    break;
+  case GE:
+    printf(">=\n");
     break;
   default:
     printf("その他\n");
