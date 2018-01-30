@@ -220,7 +220,127 @@ int reg = -1;
 
 void printTree(Node *p){
   if(p != NULL){
-    int label, table_numm, mem
+    int label, table_numm, mem;
+
+    switch(p->type){
+
+    case PROGRAM:
+      //  printf("プログラム\n");
+      if(p->child != NULL){
+	printTree(p->child);
+      }
+      break;
+    case UNIONS:
+      printf("変数宣言部\n");
+      
+      break;
+    case DECSEN:
+      printf("宣言文\n");
+      break;
+    case IDENT:
+      printf("識別子\n");
+      break;
+    case NUM:
+      printf("数値\n");
+      break;
+    case SENS:
+      printf("文集合\n");
+      break;
+    case SEN:
+      printf("文\n");
+      break;
+    case ASSIGN:
+      printf("代入文=\n");
+      break;
+    case ARRAY:
+      printf("配列\n");
+      break;
+    case EXP:
+      printf("算術式\n");
+      break;
+    case TERM:
+      printf("項\n");
+      break;
+    case FACT:
+      printf("因子\n");
+      break;
+    case ADD:
+      printf("+\n");
+      break;
+    case SUB:
+      printf("-\n");
+      break;
+    case MUL:
+      printf("*\n");
+      break;
+    case DIV:
+      printf("÷\n");
+      break;
+    case KOTI_INCRI:
+      printf("koti++\n");
+      break;
+    case KOTI_DECRI:
+      printf("koti--\n");
+      break;
+    case ZEN_INCRI:
+      printf("zen++\n");
+      break;
+    case ZEN_DECRI:
+      printf("zen--\n");
+      break;
+    case WHILE_N: 
+      printf("while\n");
+      printf("L%d: \n", label_count);
+      label_count++;
+      if(p->child->type != NUM){
+	printTree(obj->child);
+      }
+      label = label_count;
+      label_count++;
+
+      printTree(obj->child->brother);
+      reg++;
+      printf("li $t%d, L%d\n", reg, label-1);
+      printf("jr $t%d\n", reg);
+      printf("nop\n");
+      printf("L%d: \n", label);
+      reg--;
+      break;
+
+    case IF_N:
+      printf("if\n");
+      break;
+    case FOR_N:
+      //  printf("for\n");
+      printTree(obj->child);
+      printf("L%d: \n", label_count);
+      label_count++;
+      if(obj->child->brother != NULL){
+	printTree(obj->child->brother);
+      }
+
+      break;
+
+    case DEQ:
+      printf("==\n");
+      break;
+    case LT:
+      printf("<\n");
+      break;
+    case GT:
+      printf(">\n");
+      break;
+    case LE:
+      printf("<=\n");
+      break;
+    case GE:
+      printf(">=\n");
+      break;
+    default:
+      printf("その他\n");
+    }
+
+
   }
 }
 
@@ -232,9 +352,24 @@ int main(void){
   init();
 
   if(!result){
-    printTree
+    printTree(parse_result);
   }
+  
+  printf("or   $sp, $fp, $fp       #$sp<-$fp \n"
+	 "lw   $fp, fp_loc($sp)    #restore $fp from stack frame\n"
+	 "lw   $ra, ra_loc($sp)    #restore $ra from stack frame\n"
+	 "addi $sp, $sp, framesize #deallocate stack frame\n"
+	 "jr   $ra                 #return from subroutine 'sort1'\n"
+	 "nop                      #(delay slot)\n");
 
-
-
+  printf(".data 0x10004000\n");
+  for(i=0; i<t_count; i++){
+    if(table[i].mem_len != 4){
+      printf("_%s: .space %d\n", table[i].symname, table[i].mem_len);
+    }else{
+      printf("_%s: .word 0x0000\n", table[i].symname);
+    }
+  }
+  return 0;
 }
+
