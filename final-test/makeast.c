@@ -293,12 +293,12 @@ void printTree(Node *p){
       printf("L%d: \n", label_count);
       label_count++;
       if(p->child->type != NUM){
-	printTree(obj->child);
+	printTree(p->child);
       }
       label = label_count;
       label_count++;
 
-      printTree(obj->child->brother);
+      printTree(p->child->brother);
       reg++;
       printf("li $t%d, L%d\n", reg, label-1);
       printf("jr $t%d\n", reg);
@@ -312,11 +312,11 @@ void printTree(Node *p){
       break;
     case FOR_N:
       //  printf("for\n");
-      printTree(obj->child);
+      printTree(p->child);
       printf("L%d: \n", label_count);
       label_count++;
-      if(obj->child->brother != NULL){
-	printTree(obj->child->brother);
+      if(p->child->brother != NULL){
+	printTree(p->child->brother);
       }
 
       break;
@@ -350,6 +350,7 @@ int main(void){
   result = yyparse();
 
   init();
+
 
   if(!result){
     printTree(parse_result);
