@@ -5,19 +5,6 @@
 
 #define MAXBUF 10000
 
-/*
-void test(){
-  Node *p;
-  p = (Node *)malloc(sizeof(Node));
-  p->type = WHILE;
-  p->child = p1;
-  p1->brother = p2; // p->child->brother = p2 でもよい
-  p->brother = NULL;
-
-  return p;
-};
-*/
-
 
 Node* build_node1(NType t, Node* p1){
   Node *p;
@@ -110,32 +97,64 @@ Node* build_ident_node(NType t, char *s){
     return p;
 }
 
+int count = 0;
+
 /* Node の表示*/
 void printstate(Node *p){
   switch(p->type){
   case PROGRAM:
-    printf("プログラム\n");
+    /* printf("プログラム\n"); */
+    //初期化の宣言をここに書くはず
+    printf("\n");
+    printf("\tINITIAL_GP = 0x10008000\t\t# initial value of global pointer\n");
+    printf("\tINITIAL_SP = 0x7ffffffc\t\t# initial value of stack pointer\n");
+    //#system call service number
+    printf("\tstop_service = 99\n");
+
+    printf("\n\t.text\n");
+
+    printf("\ninit:\n");
+    
+    //#initialize $gp and $sp
+    printf("\tla\t$gp, INITIAL_GP\n");
+    printf("\tla\t$sp, INITIAL_SP\n");
+    
+    printf("\tjal\tmain\n");
+    printf("\tnop\n");
+
+    printf("\tli\t$v0, stop_service\n");
+    printf("\tsyscall\n");
+    printf("\tnop\n");
     break;
   case UNIONS:
-    printf("変数宣言部\n");
+    // printf("変数宣言部\n");
     break;
   case DECSEN:
-    printf("宣言文\n");
+    // printf("宣言文\n");
+    printf("\tlw\t$t%d, %s\n", count, p->child->variable);
+    count++;
     break;
   case IDENT:
-    printf("識別子\n");
+    /* printf("識別子\n"); */
+    /* printf("%s\n", p->variable); */
     break;
   case NUM:
-    printf("数値\n");
+    /* printf("数値\n"); */
+    /* printf("%d\n", p->ivalue); */
     break;
   case SENS:
-    printf("文集合\n");
+    // printf("文集合\n");
     break;
   case SEN:
-    printf("文\n");
+    // printf("文\n");
     break;
   case ASSIGN:
-    printf("代入文=\n");
+    // printf("代入文=\n");
+    if(p->child->brother->type == NUM){
+    printf("\tli\t$t%d,%d\n", count, p->child->brother->ivalue);
+    }else{
+      break;
+    }
     break;
   case ARRAY:
     printf("配列\n");
@@ -150,7 +169,14 @@ void printstate(Node *p){
     printf("因子\n");
     break;
   case ADD:
-    printf("+\n");
+    /* printf("+\n"); */
+    if(p->child->brother->type == NUM){
+    printf("\taddi\t$t%d, $t%d, %d\n", count, count, p->child->brother->ivalue);
+    count++;
+    }else if(p->child->brother->type == IDENT){
+      printf("\taddu\t$t%d, $t%d, $t%d\n", count, count, count); //3番目の引数なおす
+      count++;
+    };
     break;
   case SUB:
     printf("-\n");
@@ -173,7 +199,9 @@ void printstate(Node *p){
   case ZEN_DECRI:
     printf("zen--\n");
     break;
-  case WHILE_N: printf("while\n");
+  case WHILE_N: 
+    //  printf("while\n");
+    printf("LOOP:\n");
     break;
   case IF_N:
     printf("if\n");
@@ -185,7 +213,10 @@ void printstate(Node *p){
     printf("==\n");
     break;
   case LT:
-    printf("<\n");
+    // printf("<\n");
+    printf("\tslt\t$t%d, $t%d, $t%d\n", count, count, count); //count
+    printf("\tbne\t$t%d, $zero, LOOP\n", count);
+    printf("\tnop\n");
     break;
   case GT:
     printf(">\n");

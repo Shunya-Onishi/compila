@@ -12,7 +12,7 @@
   int ival;
   char *sval;
   int *dummy;
-  double dval;
+  int dval;
  }
 
 %token <sval> IDEN 

@@ -79,7 +79,7 @@ union YYSTYPE
   int ival;
   char *sval;
   int *dummy;
-  double dval;
+  int dval;
  
 
 #line 86 "edu4.tab.h" /* yacc.c:1909  */

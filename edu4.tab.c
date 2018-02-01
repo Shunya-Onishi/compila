@@ -142,7 +142,7 @@ union YYSTYPE
   int ival;
   char *sval;
   int *dummy;
-  double dval;
+  int dval;
  
 
 #line 149 "edu4.tab.c" /* yacc.c:355  */

@@ -1047,7 +1047,7 @@ YY_RULE_SETUP
 case 18:
 YY_RULE_SETUP
 #line 24 "edu4.l"
-{yylval.dval = atof(yytext);  return NUMBER;}
+{yylval.dval = atoi(yytext);  return NUMBER;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
