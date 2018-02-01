@@ -73,7 +73,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 10 "edu4.y" /* yacc.c:1909  */
+#line 12 "edu4.y" /* yacc.c:1909  */
 
   struct node *node;
   int ival;

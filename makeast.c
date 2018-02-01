@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "makeast.h"
+#include "edu4.tab.h"
 
 #define MAXBUF 10000
 
@@ -98,6 +99,9 @@ Node* build_ident_node(NType t, char *s){
 }
 
 int count = 0;
+int main_flag = 1;
+int valnum = 0;
+char* hensu[1000];
 
 /* Node の表示*/
 void printstate(Node *p){
@@ -111,7 +115,7 @@ void printstate(Node *p){
     //#system call service number
     printf("\tstop_service = 99\n");
 
-    printf("\n\t.text\n");
+    printf("\n\t.text\t0x00001000\n");
 
     printf("\ninit:\n");
     
@@ -125,14 +129,21 @@ void printstate(Node *p){
     printf("\tli\t$v0, stop_service\n");
     printf("\tsyscall\n");
     printf("\tnop\n");
+
+    /* printstate(p->child); */
+    /* printstate(p->child->brother); */
     break;
   case UNIONS:
     // printf("変数宣言部\n");
     break;
   case DECSEN:
     // printf("宣言文\n");
-    printf("\tlw\t$t%d, %s\n", count, p->child->variable);
+    printf("\tla\t$t%d, _%s\n", count, p->child->variable);
+    printf("\tlw\t$t%d, 0($t%d)\n", count, count);
     count++;
+    hensu[valnum] = p->child->variable;
+    valnum++;
+    
     break;
   case IDENT:
     /* printf("識別子\n"); */
@@ -144,6 +155,10 @@ void printstate(Node *p){
     break;
   case SENS:
     // printf("文集合\n");
+    if(main_flag == 1){
+    printf("main:\n");
+    main_flag--;
+    }
     break;
   case SEN:
     // printf("文\n");
@@ -152,6 +167,7 @@ void printstate(Node *p){
     // printf("代入文=\n");
     if(p->child->brother->type == NUM){
     printf("\tli\t$t%d,%d\n", count, p->child->brother->ivalue);
+    count++;
     }else{
       break;
     }
@@ -232,15 +248,35 @@ void printstate(Node *p){
   }
 }
 
+
 void printNodes(Node *p){
   if (p != NULL) {
     printstate(p);
-    if (p->child != NULL) {
-      printNodes(p->child);
-    }
-
-    if (p->brother != NULL) {
-      printNodes(p->brother);
-    }
+      if (p->child != NULL) {
+	printNodes(p->child);
+      }
+      if (p->brother != NULL) {
+	printNodes(p->brother);
+      }
   }
+}
+
+Node *parse_result = NULL;
+
+int main(){
+  
+  int result,i;
+  
+  
+  result = yyparse();
+  if(!result){
+    printNodes(parse_result);
+  }
+
+  printf("\n.data\t0x10004000\n");
+  for(i=0;i<valnum;i++){
+   printf("_%s\t.word\t0x0000\n", hensu[i]);
+  }
+  return 0;
+
 }

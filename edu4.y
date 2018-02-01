@@ -4,8 +4,9 @@
 #include "makeast.h"
   extern int yylex();
   extern int yyerror();
-  extern void printNodes(Node *p);
+  //  extern void printNodes(Node *p);
   extern char *yytext;
+  extern Node *parse_result;
   %}
 %union{
   struct node *node;
@@ -59,8 +60,9 @@
 %%
 
 program: unions sentences {
-  $$ = build_node2(PROGRAM, $1, $2);
-  printNodes($$);
+  parse_result = build_node2(PROGRAM, $1, $2);
+  //  printNodes($$);
+ 
 };
 
 unions: decsen unions  {$$ = build_node2(UNIONS, $1, $2);}
@@ -124,7 +126,9 @@ identyan:IDEN {$$ = build_ident_node(IDENT, yytext);};
 
 ntyan:NUMBER {$$ = build_num_node(NUM, $1);}; 
 
-loopsen: WHILE '('condition')''{'sentences'}'{$$ = build_node2(WHILE_N, $3, $6);};
+/* loopsen: WHILE '('condition')''{'sentences'}'{$$ = build_node2(WHILE_N, $3, $6);}; */
+
+loopsen: WHILE '('condition')''{'sentences'}'{$$ = build_node2(WHILE_N, $6, $3);};
 
 brasen: IF'('condition')''{'sentences'}'{$$ = build_node2(IF_N, $3, $6);};
 | IF'('condition')''{'sentences'}'ELSE'{'sentences'}'{$$ = build_node3(IF_N, $3, $6, $10);};
@@ -142,12 +146,12 @@ condition: expression deq expression {$$ = build_node2(DEQ, $1, $3);};
 %%
 
 
-int main(void)
-{
-  if(yyparse()){
-    fprintf(stderr, "Error\n");
-    return 1;
-  }
+/* int main(void) */
+/* { */
+/*   if(yyparse()){ */
+/*     fprintf(stderr, "Error\n"); */
+/*     return 1; */
+/*   } */
 
-  return 0;
-}
+/*   return 0; */
+/* } */
