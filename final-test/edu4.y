@@ -1,4 +1,5 @@
 %{
+  
 #include <stdio.h>
 #include "edu4.tab.h"
 #include "makeast.h"
