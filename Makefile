@@ -5,7 +5,7 @@ YACC 	= bison -d
 HDRS	= edu4.tab.h
 LDFLAGS	= -lfl -ly
 LIBS	=
-OBJS	= edu4.tab.o lex.yy.o makeast.o
+OBJS	= edu4.tab.o lex.yy.o makeast2.o
 PROGRAM	= mycompiler
 
 all:		$(PROGRAM)
@@ -23,4 +23,4 @@ clean:;		rm -f *.o *~ lex.yy.c
 ###
 lex.yy.o:lex.yy.c edu4.tab.h
 edu4.tab.o:edu4.tab.c edu4.tab.h
-makeast.o:makeast.c makeast.h
+makeast2.o:makeast2.c makeast.h

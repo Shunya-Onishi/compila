@@ -128,7 +128,7 @@ ntyan:NUMBER {$$ = build_num_node(NUM, $1);};
 
 /* loopsen: WHILE '('condition')''{'sentences'}'{$$ = build_node2(WHILE_N, $3, $6);}; */
 
-loopsen: WHILE '('condition')''{'sentences'}'{$$ = build_node2(WHILE_N, $6, $3);};
+loopsen: WHILE '('condition')''{'sentences'}'{$$ = build_node2(WHILE_N, $3, $6);};
 
 brasen: IF'('condition')''{'sentences'}'{$$ = build_node2(IF_N, $3, $6);};
 | IF'('condition')''{'sentences'}'ELSE'{'sentences'}'{$$ = build_node3(IF_N, $3, $6, $10);};
